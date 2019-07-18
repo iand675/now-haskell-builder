@@ -1,0 +1,219 @@
+openapi: 3.0.0
+info:
+  description: AWS Lambda Runtime API is an HTTP API for implementing custom runtimes
+  title: AWS Lambda Runtime API
+  version: 1.0.3
+servers:
+- url: /2018-06-01
+paths:
+  /runtime/init/error:
+    post:
+      parameters:
+      - explode: false
+        in: header
+        name: Lambda-Runtime-Function-Error-Type
+        required: false
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          '*/*':
+            schema: {}
+      responses:
+        202:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusResponse'
+          description: Accepted
+        403:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        500:
+          description: |
+            Container error. Non-recoverable state. Runtime should exit promptly.
+      summary: |
+        Non-recoverable initialization error. Runtime should exit after reporting the error. Error will be served in response to the first invoke.
+  /runtime/invocation/next:
+    get:
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventResponse'
+          description: |
+            This is an iterator-style blocking API call. Response contains event JSON document, specific to the invoking service.
+          headers:
+            Lambda-Runtime-Aws-Request-Id:
+              description: AWS request ID associated with the request.
+              explode: false
+              schema:
+                type: string
+              style: simple
+            Lambda-Runtime-Trace-Id:
+              description: X-Ray tracing header.
+              explode: false
+              schema:
+                type: string
+              style: simple
+            Lambda-Runtime-Client-Context:
+              description: |
+                Information about the client application and device when invoked through the AWS Mobile SDK.
+              explode: false
+              schema:
+                type: string
+              style: simple
+            Lambda-Runtime-Cognito-Identity:
+              description: |
+                Information about the Amazon Cognito identity provider when invoked through the AWS Mobile SDK.
+              explode: false
+              schema:
+                type: string
+              style: simple
+            Lambda-Runtime-Deadline-Ms:
+              description: |
+                Function execution deadline counted in milliseconds since the Unix epoch.
+              explode: false
+              schema:
+                type: string
+              style: simple
+            Lambda-Runtime-Invoked-Function-Arn:
+              description: |
+                The ARN requested. This can be different in each invoke that executes the same version.
+              explode: false
+              schema:
+                type: string
+              style: simple
+        403:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        500:
+          description: |
+            Container error. Non-recoverable state. Runtime should exit promptly.
+      summary: |
+        Runtime makes this HTTP request when it is ready to receive and process a new invoke.
+  /runtime/invocation/{AwsRequestId}/response:
+    post:
+      parameters:
+      - explode: false
+        in: path
+        name: AwsRequestId
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          '*/*':
+            schema: {}
+      responses:
+        202:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusResponse'
+          description: Accepted
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        403:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        413:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Payload Too Large
+        500:
+          description: |
+            Container error. Non-recoverable state. Runtime should exit promptly.
+      summary: Runtime makes this request in order to submit a response.
+  /runtime/invocation/{AwsRequestId}/error:
+    post:
+      parameters:
+      - explode: false
+        in: path
+        name: AwsRequestId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - explode: false
+        in: header
+        name: Lambda-Runtime-Function-Error-Type
+        required: false
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          '*/*':
+            schema: {}
+      responses:
+        202:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusResponse'
+          description: Accepted
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+        403:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden
+        500:
+          description: |
+            Container error. Non-recoverable state. Runtime should exit promptly.
+      summary: |
+        Runtime makes this request in order to submit an error response. It can be either a function error, or a runtime error. Error will be served in response to the invoke.
+components:
+  schemas:
+    StatusResponse:
+      example:
+        status: status
+      properties:
+        status:
+          type: string
+      type: object
+    ErrorResponse:
+      properties:
+        errorMessage:
+          type: string
+        errorType:
+          type: string
+      type: object
+    ErrorRequest:
+      properties:
+        errorMessage:
+          type: string
+        errorType:
+          type: string
+        stackTrace:
+          items:
+            type: string
+          type: array
+      type: object
+    EventResponse:
+      type: object

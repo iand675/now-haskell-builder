@@ -1,0 +1,59 @@
+name:                test-raw
+version:             0.1.0.0
+github:              "iand675/test-raw"
+license:             BSD3
+author:              "Ian Duncan"
+maintainer:          "ian@iankduncan.com"
+copyright:           "Ian Duncan"
+
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+# Metadata used when publishing your package
+# synopsis:            Short description of your package
+# category:            Web
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/iand675/test-raw#readme>
+
+dependencies:
+- base >= 4.7 && < 5
+- http-client
+- aeson
+- bytestring
+- memory
+- text
+- aws-lambda-runtime
+- wai
+- pretty-show
+- unordered-containers
+- http-types
+- case-insensitive
+
+library:
+  source-dirs: src
+
+executables:
+  test-raw-exe:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - test-raw
+
+tests:
+  test-raw-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - test-raw

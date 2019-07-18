@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "name": "test-raw",
+  "builds": [
+    { "src": "app/Main.hs", "use": "/home/ian/Code/now-haskell-builder" }
+  ],
+  "routes": [
+    { "src": "/(.*)", "dest": "app/Main.hs" }
+  ]
+}

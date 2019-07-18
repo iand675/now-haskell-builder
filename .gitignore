@@ -1,0 +1,10 @@
+.stack-work
+src/highlight.js
+src/style.css
+dist
+dist-newstyle
+cabal.project.local
+.cabal-sandbox
+cabal.sandbox.config
+node_modules
+docs
