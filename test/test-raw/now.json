@@ -2,9 +2,12 @@
   "version": 2,
   "name": "test-raw",
   "builds": [
-    { "src": "app/Main.hs", "use": "/home/ian/Code/now-haskell-builder" }
+    {
+      "src": "src/*.hs",
+      "use": "iand675/now-haskell-builder#master"
+    }
   ],
   "routes": [
-    { "src": "/(.*)", "dest": "app/Main.hs" }
+    { "src": "/(.*)", "dest": "src/$1.hs" }
   ]
 }

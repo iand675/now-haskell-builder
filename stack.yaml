@@ -3,7 +3,9 @@ build:
   haddock-arguments:
     haddock-args:
     - "--odir=./docs"
-extra-deps: [ katip-0.8.0.0 ]
+extra-deps:
+  - katip-0.8.0.0
+  - ghc-lib-parser-8.8.0.20190723
 packages:
 - '.'
 - './test/test-raw'

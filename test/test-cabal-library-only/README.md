@@ -1,0 +1,1 @@
+# test-cabal-library-only

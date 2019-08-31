@@ -11,6 +11,13 @@ packages:
       sha256: f6baad9ee2edc7ed02d71bd8433872403500ebbdfaead9e4ef226dc47b3c4b97
   original:
     hackage: katip-0.8.0.0
+- completed:
+    hackage: ghc-lib-parser-8.8.0.20190723@sha256:34ffe7ca5e6ba21eb6bf2c118046e8891a9a79007eb3db48052124d3a7186bfd,8377
+    pantry-tree:
+      size: 21278
+      sha256: 11a975bdba0758d435e8cca162f0a5f1f0ab0355b0ca335ca75f1503e8d495bb
+  original:
+    hackage: ghc-lib-parser-8.8.0.20190723
 snapshots:
 - completed:
     size: 496697
